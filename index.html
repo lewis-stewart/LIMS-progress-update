@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LIMS Project Progress</title>
+<title>LIMS Project Progress Dashboard</title>
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -17,6 +17,7 @@ h2 { font-size: 1.8em; margin-bottom: 30px; }
 #status { font-size: 1.5em; margin-bottom: 20px; }
 .footer { margin-top: 40px; font-size: 0.9em; opacity: 0.7; }
 
+/* Progress Bar */
 .progress-container {
     width: 80%;
     max-width: 600px;
@@ -36,10 +37,26 @@ h2 { font-size: 1.8em; margin-bottom: 30px; }
     font-weight: bold;
     transition: width 1s ease, background 1s ease;
 }
+
+/* Milestones */
 .milestones {
     margin-top: 20px;
     font-size: 0.95em;
     line-height: 1.6em;
+}
+
+/* Project Updates / Free text */
+#project-updates {
+    max-width:600px;
+    margin:30px auto;
+    background:#1a1a1a;
+    color:#f2f2f2;
+    padding:15px;
+    border-radius:10px;
+    text-align:left;
+    line-height:1.5em;
+    white-space: pre-wrap;
+    border-left:5px solid #0f0;
 }
 </style>
 </head>
@@ -66,14 +83,24 @@ h2 { font-size: 1.8em; margin-bottom: 30px; }
 0d  – Deployment
 </div>
 
+<!-- Project Updates / Free Text Section -->
+<div id="project-updates">
+<!--
+Type your updates here, they will appear on the page:
+• On Tuesday we completed initial testing
+• We need to focus on database migration next
+• Reminder: update user access permissions
+-->
+</div>
+
 <div class="footer">
 Countdown accuracy: ± one coffee break.
 </div>
 
 <script>
-// ---- CONFIG ----
-const startDate = new Date(Date.UTC(2026,0,16,0,0,0)); // project start (GMT)
-const endDate   = new Date(Date.UTC(2027,2,31,0,0,0)); // doomsday (GMT)
+// ==== CONFIG ====
+const startDate = new Date(Date.UTC(2026,0,16,0,0,0)); // Project start (GMT)
+const endDate   = new Date(Date.UTC(2027,2,31,0,0,0)); // Doomsday / Deadline (GMT)
 const milestones = [
     {days:90, msg:"🟢 Calm – Planning complete", color:"#0f0"},
     {days:60, msg:"🟡 Yellow – Development underway", color:"#ff0"},
@@ -82,11 +109,11 @@ const milestones = [
     {days:0,  msg:"☠️ Doomsday – Deployment!", color:"#800000"}
 ];
 
-// ---- FUNCTION ----
+// ==== COUNTDOWN & PROGRESS ====
 function updateDashboard() {
     const now = new Date();
     const diff = endDate - now;
-    
+
     // Countdown
     if(diff <= 0){
         countdown.textContent = "00d 00h 00m 00s";
@@ -96,6 +123,7 @@ function updateDashboard() {
         document.getElementById('progress-bar').style.background = "#800000";
         return;
     }
+
     const days = Math.floor(diff / (1000*60*60*24));
     const hours = Math.floor((diff / (1000*60*60)) % 24);
     const minutes = Math.floor((diff / (1000*60)) % 60);
@@ -121,6 +149,16 @@ function updateDashboard() {
 
 setInterval(updateDashboard,1000);
 updateDashboard();
+
+// ==== PROJECT UPDATES / FREE TEXT ====
+const projectUpdates = `
+• On Tuesday we completed initial testing
+• We need to focus on database migration next
+• Reminder: update user access permissions
+`;
+
+// Display updates
+document.getElementById('project-updates').innerHTML = projectUpdates.replace(/\n/g, "<br>");
 </script>
 
 </body>
