@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LIMS Project Progress</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #0e0e0e;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 40px 20px;
+}
+h1 { font-size: 2.8em; margin-bottom: 10px; }
+h2 { font-size: 1.8em; margin-bottom: 30px; }
+#countdown { font-size: 3.2em; margin: 20px 0; font-weight: bold; }
+#status { font-size: 1.5em; margin-bottom: 20px; }
+.footer { margin-top: 40px; font-size: 0.9em; opacity: 0.7; }
+
+.progress-container {
+    width: 80%;
+    max-width: 600px;
+    height: 30px;
+    background: #444;
+    border-radius: 15px;
+    margin: 20px auto;
+    overflow: hidden;
+}
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: #0f0;
+    text-align: center;
+    line-height: 30px;
+    color: #000;
+    font-weight: bold;
+    transition: width 1s ease, background 1s ease;
+}
+.milestones {
+    margin-top: 20px;
+    font-size: 0.95em;
+    line-height: 1.6em;
+}
+</style>
+</head>
+<body>
+
+<h1>‼️ LIMS PROJECT PROGRESS ‼️</h1>
+<img src="EDAC63F8-D1AE-401D-A1CF-3E149C6D9754.png"
+     alt="Project Image"
+     style="max-width: 300px; margin: 20px auto; display: block;">
+<h2>Deadline: 31 March 2027 – 00:00 GMT</h2>
+
+<div id="countdown">Calculating inevitable outcome…</div>
+<div id="status"></div>
+
+<div class="progress-container">
+    <div id="progress-bar" class="progress-bar">0%</div>
+</div>
+
+<div class="milestones">
+90d – Planning complete<br>
+60d – Development underway<br>
+30d – Testing<br>
+7d  – Final prep<br>
+0d  – Deployment
+</div>
+
+<div class="footer">
+Countdown accuracy: ± one coffee break.
+</div>
+
+<script>
+// ---- CONFIG ----
+const startDate = new Date(Date.UTC(2026,0,16,0,0,0)); // project start (GMT)
+const endDate   = new Date(Date.UTC(2027,2,31,0,0,0)); // doomsday (GMT)
+const milestones = [
+    {days:90, msg:"🟢 Calm – Planning complete", color:"#0f0"},
+    {days:60, msg:"🟡 Yellow – Development underway", color:"#ff0"},
+    {days:30, msg:"🟠 Orange – Testing underway", color:"#ffa500"},
+    {days:7,  msg:"🔴 Critical – Final prep", color:"#f00"},
+    {days:0,  msg:"☠️ Doomsday – Deployment!", color:"#800000"}
+];
+
+// ---- FUNCTION ----
+function updateDashboard() {
+    const now = new Date();
+    const diff = endDate - now;
+    
+    // Countdown
+    if(diff <= 0){
+        countdown.textContent = "00d 00h 00m 00s";
+        status.textContent = "☠️ MIDNIGHT – Doomsday has arrived!";
+        document.getElementById('progress-bar').style.width = "100%";
+        document.getElementById('progress-bar').textContent = "100% Complete";
+        document.getElementById('progress-bar').style.background = "#800000";
+        return;
+    }
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
+    const minutes = Math.floor((diff / (1000*60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+    countdown.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+    // Status based on milestones
+    let currentStatus = milestones[0];
+    for(let i=0;i<milestones.length;i++){
+        if(days <= milestones[i].days){
+            currentStatus = milestones[i];
+        }
+    }
+    status.textContent = currentStatus.msg;
+    document.getElementById('progress-bar').style.background = currentStatus.color;
+
+    // Progress % calculation
+    let percent = ((now - startDate)/(endDate - startDate))*100;
+    percent = Math.min(Math.max(percent,0),100);
+    document.getElementById('progress-bar').style.width = percent + "%";
+    document.getElementById('progress-bar').textContent = Math.floor(percent) + "% Complete";
+}
+
+setInterval(updateDashboard,1000);
+updateDashboard();
+</script>
+
+</body>
+</html>
